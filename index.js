@@ -5,7 +5,6 @@ const path = require('path');
 const AppError = require('./utils/AppError');
 
 const app = express();
-app.listen(3000,() => console.log('Server is running on port 3000...'));
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','ejs');
 app.use(express.static(path.join(__dirname,'public')));
@@ -42,3 +41,6 @@ app.use((err,req,res,next) => {
     const message = err.message;
     res.status(status).send(message);
 })
+
+const port = process.env.PORT || 3000;
+app.listen(port,() => console.log(`Server is running on port ${port}...`));

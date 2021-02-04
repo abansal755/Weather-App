@@ -1,9 +1,12 @@
-const search = document.querySelector('#search');
+const searchName = document.querySelector('#search-name');
+const searchLat = document.querySelector('#search-lat');
+const searchLong = document.querySelector('#search-long');
 const suggestions = document.querySelector('#suggestions');
-const searchForm = document.querySelector('#search-form');
+const searchForm = document.querySelector('#search-name-form');
+const searchLatLongForm = document.querySelector('#search-latlong-form')
 const weatherCardContainer = document.querySelector('#weather-card-container');
 
-search.addEventListener('input',async function(){
+searchName.addEventListener('input',async function(){
     if(this.value==="") return;
     const res = await fetch(`/api/search?q=${this.value}`);
     if(!res.ok) return;
@@ -19,9 +22,21 @@ search.addEventListener('input',async function(){
 searchForm.addEventListener('submit',async function(e){
     if(!this.checkValidity()) return;
     e.preventDefault();
-    const res = await fetch(`/api/current/?q=${search.value}`);
+    const res = await fetch(`/api/current?q=${searchName.value}`);
     if(!res.ok){
-        addAlert(`Unable to look for ${search.value}`);
+        addAlert(`Unable to look for ${searchName.value}`);
+        return;
+    }
+    const body = await res.json();
+    updateWeatherCard(body);
+})
+
+searchLatLongForm.addEventListener('submit',async function(e){
+    if(!this.checkValidity()) return;
+    e.preventDefault();
+    const res = await fetch(`/api/current?q=${searchLat.value},${searchLong.value}`);
+    if(!res.ok){
+        addAlert('Unable to look for the given values');
         return;
     }
     const body = await res.json();

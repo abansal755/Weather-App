@@ -50,7 +50,7 @@ function updateWeatherCard(body){
     div.classList.add('col-12','col-sm-6','offset-sm-3','col-xl-4','offset-xl-4');
     div.id = 'weather-card';
     div.innerHTML = `
-        <div class="card">
+        <div class="card border-0" style="box-shadow: 0px 0px 7px 0px #0000005e;">
             <div class="card-body">
                 <div class="d-flex justify-content-between mb-2">
                     <div>

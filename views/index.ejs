@@ -11,18 +11,19 @@
     <body class="container-fluid py-3 vh-100 d-flex flex-column justify-content-center">
         <div class="row" id="weather-card-container">
             <div class="col-12 col-sm-6 offset-sm-3 col-xl-4 offset-xl-4 mb-2">
+                <!-- <div class="mb-2">Search by</div> -->
                 <ul class="nav nav-pills mb-3" id="pills-tab">
                     <li class="nav-item">
-                        <a class="nav-link active" id="pills-name-tab" data-bs-toggle="pill" href="#pills-name">Search by name</a>
+                        <a class="nav-link active" id="pills-name-tab" data-bs-toggle="pill" href="#pills-name">Name</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="pills-latlong-tab" data-bs-toggle="pill" href="#pills-latlong">Search by latitude and longitude</a>
+                        <a class="nav-link" id="pills-latlong-tab" data-bs-toggle="pill" href="#pills-latlong">Latitude and Longitude</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-name">
                         <form id="search-name-form" class="d-flex needs-validation" novalidate>
-                            <input type="search" id="search-name" class="form-control" placeholder="Search" list="suggestions" required>
+                            <input type="search" id="search-name" class="form-control" placeholder="Search by name" list="suggestions" required>
                             <datalist id="suggestions"></datalist>
                             <button class="btn btn-primary ms-2"><i class="bi bi-search"></i></button>
                         </form>
@@ -37,7 +38,7 @@
                 </div>
             </div>
         </div>
-        <div class="text-center">
+        <div class="text-center mt-2">
             Powered by <a href="https://www.weatherapi.com/" title="Free Weather API">WeatherAPI.com</a>
         </div>
         <script src="/js/validation.js"></script>

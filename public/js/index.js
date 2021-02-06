@@ -6,29 +6,45 @@ const searchForm = document.querySelector('#search-name-form');
 const searchLatLongForm = document.querySelector('#search-latlong-form')
 const weatherCardContainer = document.querySelector('#weather-card-container');
 
+async function getCurrent(q){
+    return axios.get('/api/current',{
+        params: {
+            q
+        }
+    })
+}
+
+async function getSearch(q){
+    return axios.get('/api/search',{
+        params: {
+            q
+        }
+    })
+}
+
 searchName.addEventListener('input',async function(){
     if(this.value==="") return;
-    const res = await fetch(`/api/search?q=${this.value}`);
-    if(!res.ok) return;
-    const body = await res.json();
-    suggestions.replaceChildren();
-    for(const loc of body){
-        const opt = document.createElement('option');
-        opt.value = loc.name;
-        suggestions.append(opt);
-    }
+    try{
+        const response = await getSearch(this.value);
+        suggestions.replaceChildren();
+        for(const loc of response.data){
+            const opt = document.createElement('option');
+            opt.value = loc.name;
+            suggestions.append(opt);
+        }
+    }catch{}
 })
 
 searchForm.addEventListener('submit',async function(e){
     if(!this.checkValidity()) return;
     e.preventDefault();
-    const res = await fetch(`/api/current?q=${searchName.value}`);
-    if(!res.ok){
+    try{
+        const response = await getCurrent(searchName.value);
+        updateWeatherCard(response.data);
+    }catch{
         addAlert(`Unable to look for ${searchName.value}`);
         return;
     }
-    const body = await res.json();
-    updateWeatherCard(body);
 })
 
 searchLatLongForm.addEventListener('submit',async function(e){

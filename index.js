@@ -44,7 +44,7 @@ app.use((req,res) => {
 app.use((err,req,res,next) => {
     const status = err.status || 500;
     const message = err.message;
-    res.status(status).send(message);
+    res.status(status).render('error',{err});
 })
 
 const port = process.env.PORT || 3000;

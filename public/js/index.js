@@ -36,27 +36,25 @@ searchName.addEventListener('input',async function(){
 })
 
 searchForm.addEventListener('submit',async function(e){
-    if(!this.checkValidity()) return;
     e.preventDefault();
+    if(!this.checkValidity()) return;
     try{
         const response = await getCurrent(searchName.value);
         updateWeatherCard(response.data);
     }catch{
         addAlert(`Unable to look for ${searchName.value}`);
-        return;
     }
 })
 
 searchLatLongForm.addEventListener('submit',async function(e){
-    if(!this.checkValidity()) return;
     e.preventDefault();
-    const res = await fetch(`/api/current?q=${searchLat.value},${searchLong.value}`);
-    if(!res.ok){
+    if(!this.checkValidity()) return;
+    try{
+        const response = await getCurrent(`${searchLat.value},${searchLong.value}`);
+        updateWeatherCard(response.data);
+    }catch{
         addAlert('Unable to look for the given values');
-        return;
     }
-    const body = await res.json();
-    updateWeatherCard(body);
 })
 
 function updateWeatherCard(body){

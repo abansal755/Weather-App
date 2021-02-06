@@ -22,8 +22,7 @@ app.get('/api/search',wrapAsync(async (req,res) => {
         },
         validateStatus: status => true
     });
-    if(response.status<200 || response.status>299) res.status(response.status);
-    res.send(response.data);
+    res.status(response.status).send(response.data);
 }))
 
 app.get('/api/current',wrapAsync(async (req,res) => {
@@ -35,7 +34,7 @@ app.get('/api/current',wrapAsync(async (req,res) => {
         validateStatus: status => true
     });
     if(response.status<200 || response.status>299) res.status(response.status);
-    res.send(response.data);
+    res.status(response.status).send(response.data);
 }))
 
 app.use((req,res) => {

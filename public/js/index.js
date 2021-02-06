@@ -6,8 +6,8 @@ const searchForm = document.querySelector('#search-name-form');
 const searchLatLongForm = document.querySelector('#search-latlong-form')
 const weatherCardContainer = document.querySelector('#weather-card-container');
 
-async function getCurrent(q){
-    return axios.get('/api/current',{
+async function getForecast(q){
+    return axios.get('/api/forecast',{
         params: {
             q
         }
@@ -39,7 +39,7 @@ searchForm.addEventListener('submit',async function(e){
     e.preventDefault();
     if(!this.checkValidity()) return;
     try{
-        const response = await getCurrent(searchName.value);
+        const response = await getForecast(searchName.value);
         updateWeatherCard(response.data);
     }catch{
         addAlert(`Unable to look for ${searchName.value}`);
@@ -50,7 +50,7 @@ searchLatLongForm.addEventListener('submit',async function(e){
     e.preventDefault();
     if(!this.checkValidity()) return;
     try{
-        const response = await getCurrent(`${searchLat.value},${searchLong.value}`);
+        const response = await getForecast(`${searchLat.value},${searchLong.value}`);
         updateWeatherCard(response.data);
     }catch{
         addAlert('Unable to look for the given values');

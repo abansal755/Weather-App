@@ -25,15 +25,15 @@ app.get('/api/search',wrapAsync(async (req,res) => {
     res.status(response.status).send(response.data);
 }))
 
-app.get('/api/current',wrapAsync(async (req,res) => {
-    const response = await axios.get('http://api.weatherapi.com/v1/current.json',{
+app.get('/api/forecast',wrapAsync(async (req,res) => {
+    const response = await axios.get('http://api.weatherapi.com/v1/forecast.json',{
         params: {
             key: process.env.API_KEY,
-            q: req.query.q
+            q: req.query.q,
+            days: 1
         },
         validateStatus: status => true
     });
-    if(response.status<200 || response.status>299) res.status(response.status);
     res.status(response.status).send(response.data);
 }))
 

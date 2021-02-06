@@ -41,7 +41,9 @@ searchForm.addEventListener('submit',async function(e){
     try{
         const response = await getForecast(searchName.value);
         updateWeatherCard(response.data);
-    }catch{
+        updateTempGraphCard(response.data);
+    }catch(err){
+        console.log(err);
         addAlert(`Unable to look for ${searchName.value}`);
     }
 })
@@ -52,6 +54,7 @@ searchLatLongForm.addEventListener('submit',async function(e){
     try{
         const response = await getForecast(`${searchLat.value},${searchLong.value}`);
         updateWeatherCard(response.data);
+        updateTempGraphCard(response.data);
     }catch{
         addAlert('Unable to look for the given values');
     }
@@ -61,19 +64,20 @@ function updateWeatherCard(body){
     const div = document.createElement('div');
     const oldDiv = document.querySelector('#weather-card');
     if(oldDiv) oldDiv.remove();
-    div.classList.add('col-12','col-sm-6','offset-sm-3','col-xl-4','offset-xl-4');
+    div.classList.add('col-12','col-sm-6','offset-sm-3','col-xl-4','offset-xl-4','mb-2');
     div.id = 'weather-card';
     div.innerHTML = `
         <div class="card border-0" style="box-shadow: 0px 0px 7px 0px #0000005e;">
             <div class="card-body">
                 <div class="d-flex justify-content-between mb-2">
                     <div>
-                        <div class="h2">${body.location.name}</div>
-                        <div>${body.location.region}</div>
-                        <div>${body.location.country}</div>
-                        <div class="h4 d-flex justify-content-between">
+                        <div class="h2">${body.location.name}, ${body.location.region}, ${body.location.country}</div>
+                        <div class="h4 d-flex">
                             <div class="me-2"><sup>Lat</sup>${body.location.lat}</div>
                             <div><sup>Long</sup>${body.location.lon}</div>
+                        </div>
+                        <div class="h3">
+                            ${body.location.localtime}
                         </div>
                     </div>
                     <div class="d-flex align-items-center">
@@ -87,6 +91,63 @@ function updateWeatherCard(body){
                     </div>
                 </div>
         </div>`;
+    weatherCardContainer.append(div);
+}
+
+function updateTempGraphCard(body){
+    const div = document.createElement('div');
+    const oldDiv = document.querySelector('#temp-graph-card');
+    if(oldDiv) oldDiv.remove();
+    div.classList.add('col-12','col-sm-6','offset-sm-3','col-xl-4','offset-xl-4');
+    div.id = 'temp-graph-card';
+    div.innerHTML = `
+        <div class="card border-0" style="box-shadow: 0px 0px 7px 0px #0000005e;">
+            <div class="card-body">
+                <canvas id="temp-chart"></canvas>
+            </div>
+        </div>`;
+    const ctx = div.querySelector('#temp-chart');
+    const labels = [];
+    const data = [];
+    for(const hour of body.forecast.forecastday[0].hour) data.push(hour.temp_c);
+    for(let i=0;i<24;i++) labels.push(i);
+    const chart = new Chart(ctx,{
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                data,
+                backgroundColor: 'rgb(255,245,204)',
+                borderColor: 'rgb(255,204,0)'
+            }]
+        },
+        options: {
+            aspectRatio: 3,
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        drawOnChartArea: false
+                    },
+                    scaleLabel: {
+                        labelString: 'Time',
+                        display: true
+                    }
+                }],
+                yAxes: [{
+                    gridLines: {
+                        drawOnChartArea: false
+                    },
+                    scaleLabel: {
+                        labelString: 'Temperature (°C)',
+                        display: true
+                    }
+                }]
+            }
+        }
+    })
     weatherCardContainer.append(div);
 }
 

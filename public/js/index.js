@@ -102,21 +102,33 @@ function updateTempGraphCard(body){
     div.id = 'temp-graph-card';
     div.innerHTML = `
         <div class="card border-0" style="box-shadow: 0px 0px 7px 0px #0000005e;">
-            <div class="card-body">
-                <canvas id="temp-chart"></canvas>
+            <div class="card-body d-flex flex-column align-items-center">
+                <canvas id="temp-c-chart"></canvas>
+                <canvas id="temp-f-chart" hidden></canvas>
+                <div class="btn-group">
+                    <input type="radio" class="btn-check" id="cBtn" name="tempUnit" checked>
+                    <label class="btn btn-outline-primary" for="cBtn">&deg;C</label>
+                    <input type="radio" class="btn-check" id="fBtn" name="tempUnit">
+                    <label class="btn btn-outline-primary" for="fBtn">&deg;F</label>
+                </div>
             </div>
         </div>`;
-    const ctx = div.querySelector('#temp-chart');
+    const ctxC = div.querySelector('#temp-c-chart');
+    const ctxF = div.querySelector('#temp-f-chart');
     const labels = [];
-    const data = [];
-    for(const hour of body.forecast.forecastday[0].hour) data.push(hour.temp_c);
+    const dataC = [];
+    const dataF = [];
     for(let i=0;i<24;i++) labels.push(i);
-    const chart = new Chart(ctx,{
+    for(const hour of body.forecast.forecastday[0].hour){
+        dataC.push(hour.temp_c);
+        dataF.push(hour.temp_f);
+    }
+    const chartC = new Chart(ctxC,{
         type: 'line',
         data: {
             labels,
             datasets: [{
-                data,
+                data: dataC,
                 backgroundColor: 'rgb(255,245,204)',
                 borderColor: 'rgb(255,204,0)'
             }]
@@ -147,7 +159,57 @@ function updateTempGraphCard(body){
                 }]
             }
         }
-    })
+    });
+    const chartF = new Chart(ctxF,{
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                data: dataF,
+                backgroundColor: 'rgb(255,245,204)',
+                borderColor: 'rgb(255,204,0)'
+            }]
+        },
+        options: {
+            aspectRatio: 3,
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        drawOnChartArea: false
+                    },
+                    scaleLabel: {
+                        labelString: 'Time',
+                        display: true
+                    }
+                }],
+                yAxes: [{
+                    gridLines: {
+                        drawOnChartArea: false
+                    },
+                    scaleLabel: {
+                        labelString: 'Temperature (°F)',
+                        display: true
+                    }
+                }]
+            }
+        }
+    });
+    const cBtn = div.querySelector('#cBtn');
+    const fBtn = div.querySelector('#fBtn');
+    function toggleGraph() {
+        if(cBtn.checked){
+            ctxC.hidden = false;
+            ctxF.hidden = true;
+        }else{
+            ctxC.hidden = true;
+            ctxF.hidden = false;
+        }
+    }
+    cBtn.addEventListener('change',toggleGraph);
+    fBtn.addEventListener('change',toggleGraph);
     weatherCardContainer.append(div);
 }
 

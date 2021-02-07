@@ -64,7 +64,7 @@ function updateWeatherCard(body){
     const div = document.createElement('div');
     const oldDiv = document.querySelector('#weather-card');
     if(oldDiv) oldDiv.remove();
-    div.classList.add('col-12','col-sm-6','offset-sm-3','col-xl-4','offset-xl-4','mb-2');
+    div.classList.add('col-12','col-sm-10','offset-sm-1','col-md-6','offset-md-3','col-xl-4','offset-xl-4','mb-2');
     div.id = 'weather-card';
     div.innerHTML = `
         <div class="card border-0" style="box-shadow: 0px 0px 7px 0px #0000005e;">
@@ -87,7 +87,7 @@ function updateWeatherCard(body){
                 </div>
                     <div class="d-flex justify-content-between">
                         <div class="h2 me-2">${body.current.temp_c}&deg;C | ${body.current.temp_f}&deg;F</div>
-                        <div class="h2"><sup>Wind</sup> ${body.current.wind_kph}km/h</div>
+                        <div class="h2"><sup>Wind</sup> ${body.current.wind_kph}km/h <i class="bi bi-arrow-up" style="display: inline-block; transform: rotate(${body.current.wind_degree}deg)"></i></div>
                     </div>
                 </div>
         </div>`;
@@ -98,7 +98,7 @@ function updateTempGraphCard(body){
     const div = document.createElement('div');
     const oldDiv = document.querySelector('#temp-graph-card');
     if(oldDiv) oldDiv.remove();
-    div.classList.add('col-12','col-sm-6','offset-sm-3','col-xl-4','offset-xl-4');
+    div.classList.add('col-12','col-sm-10','offset-sm-1','col-md-6','offset-md-3','col-xl-4','offset-xl-4','mb-2');
     div.id = 'temp-graph-card';
     div.innerHTML = `
         <div class="card border-0" style="box-shadow: 0px 0px 7px 0px #0000005e;">

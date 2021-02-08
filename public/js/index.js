@@ -217,11 +217,12 @@ function addAlert(message){
     const div = document.createElement('div');
     div.classList.add('col-12','col-sm-6','offset-sm-3','col-xl-4','offset-xl-4');
     div.innerHTML = `
-        <div class="alert alert-danger alert-dismissible fade show">
+        <div class="alert alert-danger alert-dismissible fade show d-flex justify-content-between pe-3">
             <div>${message}</div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="spinner-border text-dark"></div>
         </div>`;
-    const closeBtn = div.querySelector('.btn-close');
-    setTimeout(() => closeBtn.click(), 2000);
+    const alertNode = div.querySelector('.alert');
+    const alert = new bootstrap.Alert(alertNode);
+    setTimeout(() => alert.close(), 2000);
     weatherCardContainer.prepend(div);
 }
